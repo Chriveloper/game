@@ -4,6 +4,7 @@ window.addEventListener("load", function(){
   canvas.width = 1080;
   canvas.height = 720;
 
+
   class InputHandler {
     constructor(game) {
       this.game = game;
@@ -46,8 +47,9 @@ window.addEventListener("load", function(){
   ctx.strokeStyle = "white";
 
   class Player {
-    constructor(game){
+    constructor(game, playerId) {
       this.game = game;
+      this.playerId = playerId;
       this.collision_x = this.game.width * 0.5;
       this.collision_y = this.game.height * 0.5;
       this.collision_radius = 30;
@@ -57,7 +59,8 @@ window.addEventListener("load", function(){
       this.img_width = 120;
       this.img_height = 90;
     }
-    draw(context){
+    
+    draw(context) {
       context.beginPath();
       context.arc(this.collision_x, this.collision_y, this.collision_radius, 0, Math.PI*2);
       context.globalAlpha = 0.5;
@@ -66,10 +69,11 @@ window.addEventListener("load", function(){
       context.stroke();
       context.drawImage(this.img, this.collision_x - this.img_width / 2, this.collision_y - this.img_height / 2, this.img_width, this.img_height);
     }
-    update(){
+    
+    async update() {
       this.collision_x += this.speed_x;
       this.collision_y += this.speed_y;
-
+  
       if (this.collision_x - this.collision_radius < 0) {
         this.collision_x = this.collision_radius;
       }
@@ -82,8 +86,12 @@ window.addEventListener("load", function(){
       if (this.collision_y + this.collision_radius > this.game.height) {
         this.collision_y = this.game.height - this.collision_radius;
       }
+
+
+
     }
   }
+  
 
   class Game {
     constructor(canvas) {
@@ -93,6 +101,8 @@ window.addEventListener("load", function(){
       this.player = new Player(this);
       this.lastKey = undefined;
       this.input = new InputHandler(this);
+  
+
     }
   
     render(context) {
@@ -101,11 +111,12 @@ window.addEventListener("load", function(){
   
     update() {
       this.player.update();
+
     }
-  }  
-
+  }
+  
   const game = new Game(canvas);
-
+  
   function animate(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     game.update();
@@ -113,4 +124,5 @@ window.addEventListener("load", function(){
     requestAnimationFrame(animate);
   }
   animate();
+  
 });
