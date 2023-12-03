@@ -5,41 +5,93 @@ window.addEventListener("load", function(){
   canvas.height = 720;
 
 
-  class InputHandler {
-    constructor(game) {
-      this.game = game;
-      this.keys = new Set();
-  
-      window.addEventListener("keydown", (event) => {
-        this.keys.add(event.key);
-        this.handleInput();
-      });
-  
-      window.addEventListener("keyup", (event) => {
-        this.keys.delete(event.key);
-        this.handleInput();
-      });
-    }
-  
-    handleInput() {
-      const player = this.game.player;
-      player.speed_x = 0;
-      player.speed_y = 0;
-  
+class InputHandler {
+  constructor(game) {
+    this.game = game;
+    this.keys = new Set();
+
+    window.addEventListener("keydown", (event) => {
+      this.keys.add(event.key);
+      this.handleInput();
+    });
+
+    window.addEventListener("keyup", (event) => {
+      this.keys.delete(event.key);
+      this.handleInput();
+    });
+  }
+
+  handleInput() {
+    const player = this.game.player;
+    player.speed_x = 0;
+    player.speed_y = 0;
+
+    let direction = 0;
+
+    if ((this.keys.has("ArrowUp") || this.keys.has("ArrowDown")) && (this.keys.has("ArrowLeft") || this.keys.has("ArrowRight"))) {
+      if (this.keys.has("ArrowUp") && this.keys.has("ArrowRight")) {
+        direction = 2
+      }
+      if (this.keys.has("ArrowDown") && this.keys.has("ArrowRight")) {
+        direction = 4
+      }
+      if (this.keys.has("ArrowUp") && this.keys.has("ArrowLeft")) {
+        direction = 6
+      }
+      if (this.keys.has("ArrowDown") && this.keys.has("ArrowLeft")) {
+        direction = 8
+      }
+    } else {
       if (this.keys.has("ArrowUp")) {
-        player.speed_y = -5;
-      }
-      if (this.keys.has("ArrowDown")) {
-        player.speed_y = 5;
-      }
-      if (this.keys.has("ArrowLeft")) {
-        player.speed_x = -5;
+        direction = 1
       }
       if (this.keys.has("ArrowRight")) {
-        player.speed_x = 5;
+        direction = 3
+      }
+      if (this.keys.has("ArrowDown")) {
+        direction = 5
+      }
+      if (this.keys.has("ArrowLeft")) {
+        direction = 7
       }
     }
+
+    switch (direction) {
+      case 1 :
+        player.speed_x = 0;
+        player.speed_y = -2;
+        break;
+      case 2 :
+        player.speed_x = 1;
+        player.speed_y = -1;
+        break;
+      case 3 :
+        player.speed_x = 2;
+        player.speed_y = 0;
+        break;
+      case 4 :
+        player.speed_x = 1;
+        player.speed_y = 1;
+        break;
+      case 5 :
+        player.speed_x = 0;
+        player.speed_y = 2;
+        break;
+      case 6 :
+        player.speed_x = -1;
+        player.speed_y = -1;
+        break;
+      case 7 :
+        player.speed_x = -2;
+        player.speed_y = 0;
+        break;
+      case 8 :
+        player.speed_x = -1;
+        player.speed_y = 1;
+        break;
+    }
   }
+}
   
 
   ctx.fillStyle = "white"
